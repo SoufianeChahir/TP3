@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Patients</title>
+</head>
+<body>
+<h1>Liste des Patients</h1>
+
+<form action="#" method="get">
+    <input type="text" name="keyword" th:value="${keyword}" placeholder="Rechercher par nom...">
+    <button type="submit">Rechercher</button>
+</form>
+
+<table border="1">
+    <tr>
+        <th>Nom</th>
+        <th>Date de Naissance</th>
+        <th>Malade</th>
+        <th>Score</th>
+        <th>Action</th>
+    </tr>
+    <tr th:each="patient : ${patients.content}">
+        <td th:text="${patient.nom}"></td>
+        <td th:text="${#dates.format(patient.dateNaissance, 'dd/MM/yyyy')}"></td>
+        <td th:text="${patient.malade ? 'Oui' : 'Non'}"></td>
+        <td th:text="${patient.score}"></td>
+        <td><a th:href="@{/patients/delete/{id}(id=${patient.id})}">Supprimer</a></td>
+    </tr>
+</table>
+
+<div>
+    <ul>
+        <li th:each="page : ${#numbers.sequence(0, patients.totalPages - 1)}" th:class="${currentPage == page ? 'active' : ''}">
+            <a th:href="@{'/patients?page=' + ${page} + '&keyword=' + ${keyword}}" th:text="${page} + 1"></a>
+        </li>
+    </ul>
+</div>
+</body>
+</html>
